@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<!-- Clever Brand Kit head (static/head.html) + the board's own typeface -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#13172e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600&family=Antonio:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/cc-brand.css">
+<link rel="stylesheet" href="/app.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 101 116'%3E%3Cpolygon fill='%23AB2B4A' points='100.423 29.134 100.423 86.868 89.721 73.062 83.76 58.003 83.756 58.003 89.418 42.731'/%3E%3Cpolygon fill='%23E87A68' points='.429 29.134 .429 86.868 9.889 73.481 17.092 58.003 17.096 58.003 9.773 43.319'/%3E%3Cpolygon fill='%23D74D4E' points='83.756 58.003 52.241 60.003 17.092 58.003 31.76 29.134 50.426 .269 70.722 31.961'/%3E%3Cpolygon fill='%23BD3246' points='100.423 29.134 83.756 58.003 50.426 .269'/%3E%3Cpolygon fill='%23F19175' points='50.426 .269 17.092 58.003 .425 29.134'/%3E%3Cpolygon fill='%23CF3942' points='83.756 58.003 72.365 82.931 50.426 115.737 27.849 81.83 17.092 58.003'/%3E%3Cpolygon fill='%23E0625B' points='50.426 115.737 .425 86.868 17.092 58.003'/%3E%3Cpolygon fill='%239A244F' points='50.422 115.737 100.423 86.868 83.756 58.003'/%3E%3C/svg%3E">
+<title>Départs · Apache Pulsar sur Clever Cloud</title>
+<meta name="description" content="Un tableau des départs à volets, alimenté en direct par un topic Apache Pulsar sur Clever Cloud.">
+<script src="/app.js" defer></script>
+</head>
+<body>
+
+<header class="cc-topbar">
+  <div class="cc-container cc-topbar__inner">
+    <a href="https://www.clever.cloud" target="_blank" rel="noopener" aria-label="Clever Cloud">{{svg "cc-logo.svg"}}</a>
+    <span class="cc-topbar__sep"></span>
+    <div class="cc-topbar__demo"><small>Démo</small>Apache Pulsar</div>
+    <span class="cc-topbar__spacer"></span>
+    <nav class="cc-topbar__nav" aria-label="Statut">
+      <span class="cc-pill cc-pill--mono cc-hide-sm">Go 1.27 · pulsar-client-go 0.21</span>
+      <span class="cc-pill cc-pill--live"><span class="cc-dot"></span>En direct sur Clever Cloud</span>
+      <a class="cc-pill cc-pill--gradient" href="https://academy.clever.cloud/" target="_blank" rel="noopener">Se certifier ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="hall">
+  <svg class="canopy" viewBox="0 0 1200 260" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="1.2">
+      <path d="M-40 260 C 120 40, 480 40, 640 260"/><path d="M-10 260 C 140 70, 460 70, 610 260"/>
+      <path d="M560 260 C 720 40, 1080 40, 1240 260"/><path d="M590 260 C 740 70, 1060 70, 1210 260"/>
+      <path d="M300 82 V260 M900 82 V260 M120 150 V260 M480 150 V260 M720 150 V260 M1080 150 V260"/>
+      <path d="M40 200 H560 M640 200 H1160" stroke-dasharray="2 10"/>
+    </g>
+  </svg>
+
+  <section class="station cc-container" aria-labelledby="board-title">
+    <div class="station__head">
+      <div class="plate">
+        <span class="plate__name">Clever-Centrale</span>
+        <span class="plate__sub">Grandes lignes</span>
+      </div>
+      <p class="station__lead">Chaque volet de ce tableau bascule à l'arrivée d'un message Apache Pulsar. Prenez le poste du chef de gare : votre ordre part dans le topic et revient sur le tableau.</p>
+      <svg class="clock" id="clock" viewBox="0 0 120 120" role="img" aria-label="Horloge de la gare">
+        <circle cx="60" cy="60" r="58" class="clock__bezel"/>
+        <circle cx="60" cy="60" r="51" class="clock__dial"/>
+        <g id="clock-ticks"></g>
+        <g class="clock__hand clock__hand--h" id="hand-h"><path d="M57.6 64 L58.6 30 L61.4 30 L62.4 64 Z"/></g>
+        <g class="clock__hand clock__hand--m" id="hand-m"><path d="M58.3 66 L59.2 16 L60.8 16 L61.7 66 Z"/></g>
+        <g class="clock__hand clock__hand--s" id="hand-s"><path d="M59.4 72 V22"/><circle cx="60" cy="19" r="3.4"/></g>
+        <circle cx="60" cy="60" r="2.6" class="clock__cap"/>
+      </svg>
+    </div>
+
+    <div class="board" id="board">
+      <div class="board__head">
+        <h1 class="board__title" id="board-title">Départs <span>Departures</span></h1>
+        <p class="board__link" id="link" role="status"><span class="lamp"></span><span id="link-text">Connexion au topic…</span></p>
+        <button class="board__sound" id="sound" type="button" aria-pressed="false" title="Le bruit des volets">Son</button>
+      </div>
+      <div class="board__cols" aria-hidden="true">
+        <span class="c-time">Heure</span><span class="c-train">Train</span><span class="c-dest">Destination</span><span class="c-plat">Voie</span><span class="c-status">Information</span>
+      </div>
+      <ol class="board__rows" id="rows" aria-label="Prochains départs"></ol>
+      <div class="board__replay" id="replay-bar" hidden>
+        <span class="board__replay-label" id="replay-label">Relecture</span>
+        <span class="board__replay-track"><span id="replay-progress"></span></span>
+      </div>
+      <p class="board__foot" id="board-foot">Le tableau se construit uniquement à partir des messages lus dans Pulsar.</p>
+    </div>
+  </section>
+
+  <section class="desk cc-container">
+    <div class="console" id="console" aria-labelledby="console-title">
+      <h2 class="desk__title" id="console-title">Poste du chef de gare</h2>
+      <p class="desk__text">Touchez un train au tableau, puis donnez un ordre. Il est publié dans le topic par le producteur <code>station-master</code>, comme les annonces de l'horloge de gare.</p>
+      <label class="field">
+        <span>Train</span>
+        <select id="order-train" class="cc-select"><option value="">Aucun train au tableau</option></select>
+      </label>
+      <div class="orders" role="group" aria-label="Ordres">
+        <div class="orders__row">
+          <span class="orders__label">Retarder</span>
+          <button class="key" type="button" data-action="delay" data-minutes="5">+5 min</button>
+          <button class="key" type="button" data-action="delay" data-minutes="10">+10 min</button>
+          <button class="key" type="button" data-action="delay" data-minutes="15">+15 min</button>
+        </div>
+        <div class="orders__row">
+          <label class="orders__label" for="order-platform">Voie</label>
+          <select id="order-platform" class="cc-select orders__select"></select>
+          <button class="key" type="button" data-action="platform">Changer de voie</button>
+        </div>
+        <div class="orders__row">
+          <span class="orders__label">Incident</span>
+          <button class="key key--red" type="button" data-action="cancel">Supprimer le train</button>
+        </div>
+      </div>
+      <p class="console__error" id="order-error" role="alert" hidden></p>
+      <ol class="journey" id="journey" aria-label="Trajet de votre message">
+        <li data-step="sent"><b>Ordre envoyé</b><span>en attente d'un ordre</span></li>
+        <li data-step="stored"><b>Stocké par le broker</b><span>—</span></li>
+        <li data-step="delivered"><b>Livré à l'abonnement du tableau</b><span>—</span></li>
+        <li data-step="shown"><b>Affiché au tableau</b><span>—</span></li>
+      </ol>
+    </div>
+
+    <div class="signalbox" id="signalbox" aria-labelledby="signal-title">
+      <div class="signalbox__head">
+        <h2 class="desk__title" id="signal-title">Poste d'aiguillage</h2>
+        <span class="signalbox__retention" id="retention"></span>
+      </div>
+      <svg class="tco" id="tco" viewBox="0 0 600 240" role="img" aria-label="Trajet des messages : deux producteurs, un topic, trois abonnements">
+        <defs>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g class="tco__tracks">
+          <path id="t-clock" d="M128 48 H160 Q180 48 190 68 L204 100 Q212 120 232 120 H250"/>
+          <path id="t-master" d="M128 192 H160 Q180 192 190 172 L204 140 Q212 120 232 120 H250"/>
+          <path id="t-board" d="M370 120 H392 Q410 120 418 100 L430 70 Q438 48 458 48 H472"/>
+          <path id="t-archive" d="M370 120 H472"/>
+          <path id="t-reader" class="tco__reader" d="M370 120 H392 Q410 120 418 140 L430 170 Q438 192 458 192 H472"/>
+        </g>
+        <g class="tco__nodes">
+          <g class="node" id="n-clock"><rect x="8" y="26" width="120" height="44" rx="6"/><circle class="node__lamp" cx="23" cy="48" r="5"/><text x="36" y="45">Horloge</text><text class="node__sub" x="36" y="60">producteur</text></g>
+          <g class="node" id="n-master"><rect x="8" y="170" width="120" height="44" rx="6"/><circle class="node__lamp node__lamp--you" cx="23" cy="192" r="5"/><text x="36" y="189">Chef de gare</text><text class="node__sub" x="36" y="204">producteur</text></g>
+          <g class="node node--topic" id="n-topic"><rect x="250" y="94" width="120" height="52" rx="7"/><text x="310" y="117" text-anchor="middle">departures</text><text class="node__sub" x="310" y="134" text-anchor="middle">topic persistant</text></g>
+          <g class="node" id="n-board"><rect x="472" y="26" width="120" height="44" rx="6"/><circle class="node__lamp" cx="487" cy="48" r="5"/><text x="500" y="45">Tableau</text><text class="node__sub" x="500" y="60">non durable</text></g>
+          <g class="node" id="n-archive"><rect x="472" y="98" width="120" height="44" rx="6"/><circle class="node__lamp" cx="487" cy="120" r="5"/><text x="500" y="117">Archives</text><text class="node__sub" x="500" y="132">durable</text></g>
+          <g class="node node--dim" id="n-reader"><rect x="472" y="170" width="120" height="44" rx="6"/><circle class="node__lamp" cx="487" cy="192" r="5"/><text x="500" y="189">Retardataire</text><text class="node__sub" x="500" y="204">reader</text></g>
+        </g>
+        <g id="tco-queue" class="tco__queue"></g>
+        <g id="tco-pulses" filter="url(#glow)"></g>
+      </svg>
+      <dl class="topic">
+        <div><dt>Topic</dt><dd><code id="topic-name">{{.Topic}}</code></dd></div>
+        <div class="topic__nums"><dt>Messages reçus par le broker</dt><dd id="stat-in">—</dd></div>
+        <div class="topic__nums"><dt>Stockage</dt><dd id="stat-storage">—</dd></div>
+      </dl>
+      <table class="subs" aria-label="Abonnements du topic">
+        <thead><tr><th>Abonnement</th><th>Type</th><th>Retard (backlog)</th></tr></thead>
+        <tbody id="subs"><tr><td colspan="3">Lecture des statistiques du broker…</td></tr></tbody>
+      </table>
+      <h3 class="signalbox__sub">Derniers messages</h3>
+      <ol class="messages" id="messages"></ol>
+    </div>
+  </section>
+
+  <section class="cc-container late-wrap" aria-labelledby="late-title"><div class="latecomer">
+    <div class="latecomer__text">
+      <h2 class="desk__title" id="late-title">Un abonné en retard ne perd rien</h2>
+      <p id="late-copy">Pulsar garde les messages du topic, même après leur lecture. Un nouvel abonné peut relire la journée depuis le premier message et reconstruire le tableau tout seul.</p>
+      <p class="latecomer__proof" id="late-proof"></p>
+      <p class="latecomer__proof" id="late-result" role="status"></p>
+    </div>
+    <div class="latecomer__actions">
+      <button class="cc-btn cc-btn--gradient" id="replay" type="button">Rejouer les 30 dernières minutes</button>
+      <button class="cc-btn" id="replay-stop" type="button" hidden>Revenir au direct</button>
+    </div>
+  </div></section>
+
+  <section class="cc-container frame-panel">
+    <div class="cc-platform">
+      <div class="cc-platform__head">
+        <h3>Running on Clever Cloud</h3>
+        <span class="cc-pill cc-pill--ok" id="clock-pill"><span class="cc-dot"></span>Instance {{.Instance}}</span>
+      </div>
+      <dl class="cc-kv">
+        {{range .Platform}}<div><dt>{{.Label}}</dt>{{if .Value}}<dd>{{.Value}}</dd>{{else}}<dd class="is-empty">injecté au déploiement</dd>{{end}}</div>
+        {{end}}
+      </dl>
+      <div class="cc-platform__foot">Variables injectées par la plateforme : <a href="https://www.clever.cloud/developers/doc/reference/reference-environment-variables/" target="_blank" rel="noopener">référence</a>. Les identifiants Pulsar restent côté serveur.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="cc-footer">
+  <div class="cc-container">
+    <div class="cc-footer__inner">
+      <div class="cc-footer__brand">
+        {{svg "cc-logo.svg"}}
+        <p>PaaS européen entièrement managé. Un add-on Pulsar, une app Go, un <span class="cc-kbd">clever deploy</span>.</p>
+        <a class="footer-badge" href="https://academy.clever.cloud/" target="_blank" rel="noopener">
+          {{svg "cc-badge.svg"}}
+          <span><b>Clever Cloud Academy</b>Passez la certification Clever Cloud ↗</span>
+        </a>
+      </div>
+      <div>
+        <h4>Documentation</h4>
+        <ul>
+          <li><a href="https://www.clever.cloud/developers/doc/deploy/pulsar/" target="_blank" rel="noopener">Add-on Pulsar</a></li>
+          <li><a href="https://www.clever.cloud/developers/doc/deploy/applications/golang/" target="_blank" rel="noopener">Runtime Go</a></li>
+          <li><a href="https://console.clever-cloud.com" target="_blank" rel="noopener">Console Clever Cloud</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Aller plus loin</h4>
+        <ul>
+          <li><a class="is-cert" href="https://academy.clever.cloud/" target="_blank" rel="noopener">Certification Clever Cloud ↗</a></li>
+          <li><a href="https://www.clever.cloud/product/pulsar/" target="_blank" rel="noopener">Pulsar sur Clever Cloud</a></li>
+          <li><a href="https://www.clever.cloud" target="_blank" rel="noopener">clever.cloud</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="cc-footer__bottom"><span>Démo réalisée par l'équipe avant-vente Clever Cloud</span><span>© 2026 Clever Cloud</span></div>
+  </div>
+</footer>
+</body>
+</html>

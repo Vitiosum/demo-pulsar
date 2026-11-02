@@ -1,0 +1,19 @@
+# build outputs
+/demo-pulsar
+/bin/
+*.test
+*.out
+
+# dependencies
+/vendor/
+
+# environment (keep the example)
+.env*
+!.env.example
+
+# Clever Cloud local link
+.clever.json
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,19 @@
+<svg class="cc-cert__badge" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="Badge Certification Clever Cloud">
+  <defs>
+    <linearGradient id="ccBadgeGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f57461"/><stop offset="0.5" stop-color="#cb1c42"/><stop offset="1" stop-color="#a51050"/>
+    </linearGradient>
+    <path id="ccBadgeRing" d="M110,110 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"/>
+  </defs>
+  <circle cx="110" cy="110" r="107" fill="#0e1124" stroke="url(#ccBadgeGrad)" stroke-width="4"/>
+  <circle cx="110" cy="110" r="97" fill="none" stroke="rgba(222,221,238,0.2)" stroke-width="1" stroke-dasharray="2 5"/>
+  <circle cx="110" cy="110" r="66" fill="#1c2045" stroke="rgba(222,221,238,0.16)"/>
+  <text font-family="'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif" font-size="12.5" font-weight="700" letter-spacing="3" fill="#deddee" textLength="524" lengthAdjust="spacing">
+    <textPath href="#ccBadgeRing" textLength="524" lengthAdjust="spacing">CERTIFIED · CLEVER CLOUD · ACADEMY · CERTIFIED · CLEVER CLOUD · ACADEMY · </textPath>
+  </text>
+  <g transform="translate(110 103) scale(0.6) translate(-50.4 -58)">
+    <polygon fill="#AB2B4A" points="100.423 29.134 100.423 86.868 89.721 73.062 83.76 58.003 83.756 58.003 89.418 42.731"/><polygon fill="#E87A68" points=".429 29.134 .429 86.868 9.889 73.481 17.092 58.003 17.096 58.003 9.773 43.319"/><polygon fill="#D74D4E" points="83.756 58.003 52.241 60.003 17.092 58.003 31.76 29.134 50.426 .269 70.722 31.961"/><polygon fill="#BD3246" points="100.423 29.134 83.756 58.003 50.426 .269"/><polygon fill="#F19175" points="50.426 .269 17.092 58.003 .425 29.134"/><polygon fill="#CF3942" points="83.756 58.003 72.365 82.931 50.426 115.737 27.849 81.83 17.092 58.003"/><polygon fill="#E0625B" points="50.426 115.737 .425 86.868 17.092 58.003"/><polygon fill="#9A244F" points="50.422 115.737 100.423 86.868 83.756 58.003"/>
+  </g>
+  <circle cx="110" cy="158" r="10" fill="url(#ccBadgeGrad)"/>
+  <path d="M105 158l3.5 3.5 6.5-6.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
