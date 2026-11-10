@@ -2,6 +2,8 @@
 
 > A split-flap departures board, fed live by an Apache Pulsar topic. A simulated station clock announces trains, assigns platforms, starts boarding and dispatches departures; every one of those events is a Pulsar message, and every flap that turns on screen was read from the topic. Visitors take the station master's desk, delay or cancel a train, and watch their message travel producer → topic → subscription → board in a few milliseconds. A "late subscriber" replays the last 30 minutes from the topic and rebuilds the board from scratch. Go, one add-on, dressed in the Clever Brand Kit.
 
+![The app run locally against a standalone Apache Pulsar broker: the station master delays a train by 10 minutes, the order travels through the topic and the flaps of the board turn to the delay](docs/tour.gif)
+
 ![Departures board on desktop](docs/screenshot-desktop.png)
 
 <img src="docs/screenshot-phone.png" alt="Departures board on a phone" width="300">
